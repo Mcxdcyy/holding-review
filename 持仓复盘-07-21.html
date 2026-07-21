@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f7f4ef">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -622,88 +622,231 @@
     padding: 8px 16px 0;
   }
 
+  .nav-short { display: none; }
+
   /* ── 手机适配 ── */
   @media (max-width: 640px) {
+    :root {
+      --font: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", system-ui, sans-serif;
+      --num: "IBM Plex Sans", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+    }
+
+    body {
+      font-size: 15px;
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+    }
+
+    html {
+      scroll-padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .shell {
+      padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    }
+
     .mast {
-      padding: calc(18px + env(safe-area-inset-top, 0px)) 16px 16px;
+      padding: calc(20px + env(safe-area-inset-top, 0px)) 18px 18px;
     }
     .mast::after {
-      width: 110px; height: 110px; right: -28px; bottom: -36px;
+      width: 96px; height: 96px; right: -30px; bottom: -40px;
+      opacity: .75;
     }
-    .mast h1 { font-size: 26px; }
-    .mast h1 span { font-size: 13px; margin-top: 8px; }
-
-    .nav-strip {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      box-shadow: 0 1px 0 var(--line);
+    .mast-kicker {
+      font-size: 10px;
+      letter-spacing: .18em;
+      margin-bottom: 8px;
     }
-    .nav-strip::-webkit-scrollbar { display: none; }
-    .nav-strip a {
-      flex: 1 0 auto;
-      min-width: 0;
-      padding: 11px 10px;
-      font-size: 11px;
+    .mast h1 {
+      font-size: 24px;
       line-height: 1.25;
+      letter-spacing: -.01em;
     }
-    .nav-strip a em { font-size: 11px; margin-bottom: 1px; }
+    .mast h1 span {
+      font-size: 13px;
+      margin-top: 8px;
+      line-height: 1.45;
+      color: rgba(245,242,235,.72);
+    }
+
+    /* 底部导航：拇指区更易点 */
+    .nav-strip {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 40;
+      border-bottom: none;
+      border-top: 1px solid var(--line);
+      background: rgba(255,252,247,.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      box-shadow: 0 -6px 20px rgba(20,20,20,.06);
+    }
+    .nav-strip a {
+      flex: 1;
+      min-width: 0;
+      min-height: 52px;
+      padding: 8px 4px 10px;
+      font-size: 12px;
+      line-height: 1.2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .nav-strip a:active {
+      background: var(--lime);
+      color: var(--lime-ink);
+    }
+    .nav-strip a:active em { color: var(--lime-ink); }
+    .nav-strip a em {
+      font-size: 10px;
+      margin-bottom: 0;
+      letter-spacing: .04em;
+    }
+    .nav-full { display: none; }
+    .nav-short { display: inline; }
 
     .pad {
-      padding: 12px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+      padding: 14px 14px 12px;
     }
-    .block { margin-bottom: 12px; }
+    .block {
+      margin-bottom: 14px;
+      border-radius: 0;
+    }
     .block-head {
-      flex-wrap: wrap;
-      gap: 6px 10px;
-      padding: 12px 12px;
+      align-items: baseline;
+      gap: 8px 10px;
+      padding: 13px 14px;
     }
-    .block-num { font-size: 18px; min-width: 28px; }
-    .block-title { font-size: 15px; }
-    .block-sub {
-      width: 100%;
-      margin-left: 0;
+    .block-num { font-size: 20px; min-width: 30px; }
+    .block-title { font-size: 16px; line-height: 1.3; }
+    .block-sub { display: none; }
+    .block-body { padding: 14px; }
+
+    .merge { gap: 10px; margin-bottom: 14px; }
+    .big-stat { padding: 14px; }
+    .big-stat .lbl {
+      font-size: 11px;
+      margin-bottom: 8px;
+      letter-spacing: .04em;
+    }
+    .big-stat .val {
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .big-stat.hero-stat .val { font-size: 34px; }
+    .big-stat .hint {
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .meter { margin-top: 12px; height: 7px; }
+
+    .accounts { gap: 10px; }
+    .acct { padding: 12px 13px; }
+    .acct-name { font-size: 14px; }
+    .acct-pos { font-size: 13px; }
+    .acct-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 12px;
+    }
+    .acct-grid .lbl { font-size: 11px; margin-bottom: 3px; }
+    .acct-grid .val { font-size: 16px; line-height: 1.2; }
+
+    .fb { gap: 10px; }
+    .fb-row { gap: 10px; }
+    .fb-stat { padding: 14px; }
+    .fb-stat .lbl { font-size: 11px; margin-bottom: 8px; }
+    .fb-stat .val { font-size: 30px; }
+    .fb-stat .meta { font-size: 13px; }
+    .fb-chips { gap: 8px; }
+    .fb-chip {
+      font-size: 12px;
+      padding: 5px 10px;
+      line-height: 1.3;
+    }
+    .fb-plans { margin-top: 14px; gap: 10px; }
+    .fb-plan { padding: 14px 14px 13px; }
+    .fb-plan-k {
       font-size: 10px;
+      margin-bottom: 10px;
     }
-    .block-body { padding: 12px; }
+    .fb-plan-v {
+      font-size: 16px;
+      line-height: 1.6;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .fb-plan-v .sub {
+      font-size: 14px;
+      line-height: 1.55;
+      margin-top: 8px;
+    }
+    .fb-plan.quiet .fb-plan-v {
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-    .merge { gap: 8px; margin-bottom: 12px; }
-    .big-stat { padding: 12px; }
-    .big-stat .val { font-size: 26px; }
-    .big-stat.hero-stat .val { font-size: 30px; }
-
-    .accounts { gap: 8px; }
-    .acct { padding: 10px; }
-    .acct-grid { gap: 6px 10px; }
-    .acct-grid .val { font-size: 15px; }
-
-    .fb { gap: 8px; }
-    .fb-row { gap: 8px; }
-    .fb-stat { padding: 12px; }
-    .fb-stat .val { font-size: 26px; }
-    .fb-plan { padding: 14px 12px 12px; }
-    .fb-plan-v { font-size: 15px; word-break: break-word; }
-    .fb-plan.quiet .fb-plan-v { font-size: 13px; }
-
-    .hold { margin-bottom: 12px; }
-    .hold-top { padding: 11px 12px 9px; gap: 6px 8px; }
-    .hold-name { font-size: 16px; }
+    .broker {
+      font-size: 12px;
+      margin: 16px 0 10px;
+      letter-spacing: .08em;
+    }
+    .hold {
+      margin-bottom: 14px;
+      box-shadow: 0 1px 0 rgba(20,20,20,.03), 0 4px 14px rgba(20,20,20,.04);
+    }
+    .hold-top {
+      padding: 12px 14px 11px;
+      gap: 4px 10px;
+      align-items: center;
+    }
+    .hold-name { font-size: 17px; line-height: 1.25; }
+    .hold-code { font-size: 13px; }
     .hold-px {
-      margin-left: 0;
-      width: 100%;
+      margin-left: auto;
+      width: auto;
+      max-width: 100%;
       font-size: 13px;
+      line-height: 1.35;
+      text-align: right;
     }
-    .chk-grid { margin: 10px; gap: 7px; }
-    .chk { padding: 9px 10px; }
-    .chk-q { font-size: 12px; }
-    .chk-d { font-size: 12px; }
-    .hold-sum { margin: 0 10px 10px; gap: 7px; }
-    .sum-lines li, .sum-card.sum-act .sum-line { font-size: 12px; }
 
-    .foot { padding: 10px 12px 0; font-size: 10px; }
+    .chk-grid { margin: 12px 12px 10px; gap: 8px; }
+    .chk { padding: 11px 12px; }
+    .chk-q {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .chk-st {
+      font-size: 11px;
+      padding: 3px 8px;
+    }
+    .chk-d {
+      font-size: 13px;
+      line-height: 1.55;
+      margin-top: 2px;
+    }
+
+    .hold-sum { margin: 0 12px 12px; gap: 8px; }
+    .sum-card { padding: 12px 13px; }
+    .sum-k { font-size: 14px; margin-bottom: 8px; }
+    .sum-lines { gap: 10px; }
+    .sum-lines li,
+    .sum-card.sum-act .sum-line {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .foot {
+      padding: 12px 8px 4px;
+      font-size: 11px;
+      line-height: 1.5;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -723,9 +866,9 @@
   </header>
 
   <nav class="nav-strip anim d1">
-    <a href="#sec-account"><em>01</em>账户概览</a>
-    <a href="#sec-winrate"><em>02</em>开仓反馈</a>
-    <a href="#sec-stocks"><em>03</em>个人情绪 &amp; 持仓复盘</a>
+    <a href="#sec-account"><em>01</em><span class="nav-full">账户概览</span><span class="nav-short">账户</span></a>
+    <a href="#sec-winrate"><em>02</em><span class="nav-full">开仓反馈</span><span class="nav-short">开仓</span></a>
+    <a href="#sec-stocks"><em>03</em><span class="nav-full">个人情绪 &amp; 持仓复盘</span><span class="nav-short">持仓</span></a>
   </nav>
 
   <div class="pad">
