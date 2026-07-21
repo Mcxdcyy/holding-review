@@ -94,6 +94,23 @@
     text-transform: uppercase; color: var(--lime); margin-bottom: 10px;
     position: relative; z-index: 1;
   }
+  .back-list {
+    position: relative; z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--slate);
+    background: var(--lime);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.2;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .back-list:active { filter: brightness(.95); }
   .mast h1 {
     font-family: var(--font);
     font-size: clamp(28px, 6vw, 36px);
@@ -638,19 +655,25 @@
     }
 
     html {
-      scroll-padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+      scroll-padding-top: calc(12px + env(safe-area-inset-top, 0px));
     }
 
     .shell {
-      padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     }
 
     .mast {
-      padding: calc(20px + env(safe-area-inset-top, 0px)) 18px 18px;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 18px 18px;
     }
     .mast::after {
       width: 96px; height: 96px; right: -30px; bottom: -40px;
       opacity: .75;
+    }
+    .back-list {
+      margin-bottom: 12px;
+      min-height: 40px;
+      padding: 10px 14px;
+      font-size: 14px;
     }
     .mast-kicker {
       font-size: 10px;
@@ -669,46 +692,8 @@
       color: rgba(245,242,235,.72);
     }
 
-    /* 底部导航：拇指区更易点 */
-    .nav-strip {
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      z-index: 40;
-      border-bottom: none;
-      border-top: 1px solid var(--line);
-      background: rgba(255,252,247,.96);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      box-shadow: 0 -6px 20px rgba(20,20,20,.06);
-    }
-    .nav-strip a {
-      flex: 1;
-      min-width: 0;
-      min-height: 52px;
-      padding: 8px 4px 10px;
-      font-size: 12px;
-      line-height: 1.2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .nav-strip a:active {
-      background: var(--lime);
-      color: var(--lime-ink);
-    }
-    .nav-strip a:active em { color: var(--lime-ink); }
-    .nav-strip a em {
-      font-size: 10px;
-      margin-bottom: 0;
-      letter-spacing: .04em;
-    }
-    .nav-full { display: none; }
-    .nav-short { display: inline; }
+    /* 手机不显示分区 tab */
+    .nav-strip { display: none; }
 
     .pad {
       padding: 14px 14px 12px;
@@ -861,6 +846,7 @@
 <div class="shell">
 
   <header class="mast anim">
+    <a class="back-list" href="https://mcxdcyy.github.io/holding-review/">← 日期列表</a>
     <div class="mast-kicker">Daily Position Review</div>
     <h1>
       持仓复盘-07-21
