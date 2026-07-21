@@ -798,12 +798,15 @@
     }
     .hold {
       margin-bottom: 14px;
+      /* 手机去掉左侧粗黑条，改顶栏细线，不占横向宽度 */
+      border-left: 1px solid var(--line);
       box-shadow: 0 1px 0 rgba(20,20,20,.03), 0 4px 14px rgba(20,20,20,.04);
     }
     .hold-top {
       padding: 12px 14px 11px;
       gap: 4px 10px;
       align-items: center;
+      border-top: 3px solid var(--slate);
     }
     .hold-name { font-size: 17px; line-height: 1.25; }
     .hold-code { font-size: 13px; }
