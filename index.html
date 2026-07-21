@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141414">
+<title>持仓复盘</title>
+<style>
+  :root {
+    --bg: #141414;
+    --paper: #1c1c1c;
+    --ink: #f5f2ec;
+    --soft: #a8a29a;
+    --line: #2e2e2e;
+    --accent: #b8e000;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    font-family: "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: calc(24px + env(safe-area-inset-top, 0px)) 20px calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+  .wrap { max-width: 420px; margin: 0 auto; }
+  h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+  .sub { margin: 0 0 28px; color: var(--soft); font-size: 14px; line-height: 1.5; }
+  .latest {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 18px 16px;
+    margin-bottom: 20px;
+  }
+  .latest .k {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .latest .t { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .latest .h { font-size: 13px; color: var(--soft); }
+  .list { list-style: none; margin: 0; padding: 0; }
+  .list li { margin: 0 0 8px; }
+  .list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .list a span { color: var(--soft); font-size: 13px; font-weight: 500; }
+  .foot { margin-top: 28px; color: var(--soft); font-size: 12px; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>持仓复盘</h1>
+    <p class="sub">手机打开即可查看。点「最新」进入当天报表。</p>
+    <a class="latest" id="latest" href="./07-21.html">
+      <div class="k">LATEST</div>
+      <div class="t" id="latestTitle">07-21</div>
+      <div class="h">打开今日持仓复盘 →</div>
+    </a>
+    <ul class="list" id="list"></ul>
+    <p class="foot">公开网页 · 仅供本人查阅时请勿转发链接</p>
+  </div>
+  <script>
+    const days = ["07-21", "07-20", "07-17", "07-16", "07-15"];
+    const latest = days[0];
+    document.getElementById("latest").href = "./" + latest + ".html";
+    document.getElementById("latestTitle").textContent = latest;
+    document.getElementById("list").innerHTML = days.map((d, i) =>
+      `<li><a href="./${d}.html"><b>${d}</b><span>${i === 0 ? "最新" : "打开"}</span></a></li>`
+    ).join("");
+  </script>
+</body>
+</html>
