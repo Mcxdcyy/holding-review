@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f7f4ef">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>持仓复盘-07-22</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f4ef;
+    --ink: #141414;
+    --soft: #5c574f;
+    --mute: #9a948a;
+    --paper: #fffcf7;
+    --line: #e4ddd2;
+    --lime: #b8e000;
+    --lime-ink: #3d4a00;
+    --rust: #e23d28;
+    --rust-bg: #fdecea;
+    --green: #1f7a4c;
+    --green-bg: #e8f5ee;
+    --slate: #2a3340;
+    --font: "Noto Sans SC", "PingFang SC", sans-serif;
+    --num: "IBM Plex Sans", "Noto Sans SC", "PingFang SC", sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    min-height: 100dvh;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: .4;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  }
+
+  .shell {
+    position: relative; z-index: 1;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 0 calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+
+  @keyframes inUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fillX {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  .anim { animation: inUp .5s cubic-bezier(.2,.8,.2,1) both; }
+  .d1 { animation-delay: .05s; }
+  .d2 { animation-delay: .12s; }
+  .d3 { animation-delay: .2s; }
+
+  /* ── masthead ── */
+  .mast {
+    background: var(--slate);
+    color: #f5f2eb;
+    padding: 28px 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mast::after {
+    content: "";
+    position: absolute; right: -20px; bottom: -30px;
+    width: 160px; height: 160px;
+    background: var(--lime);
+    transform: rotate(18deg);
+    opacity: .9;
+  }
+  .mast-kicker {
+    font-size: 11px; font-weight: 700; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--lime); margin-bottom: 10px;
+    position: relative; z-index: 1;
+  }
+  .back-list {
+    position: relative; z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: var(--slate);
+    background: var(--lime);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.2;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .back-list:active { filter: brightness(.95); }
+  .mast h1 {
+    font-family: var(--font);
+    font-size: clamp(28px, 6vw, 36px);
+    font-weight: 900; letter-spacing: -.02em; line-height: 1.15;
+    color: #fff; position: relative; z-index: 1;
+  }
+  .mast h1 span {
+    display: block;
+    font-family: var(--font);
+    font-size: 14px; font-weight: 500; letter-spacing: 0;
+    color: rgba(245,242,235,.65); margin-top: 10px;
+  }
+
+  .nav-strip {
+    display: flex; gap: 0; border-bottom: 1px solid var(--line);
+    background: var(--paper);
+  }
+  .nav-strip a {
+    flex: 1; text-align: center; text-decoration: none;
+    padding: 12px 8px; font-size: 12px; font-weight: 700;
+    color: var(--soft); border-right: 1px solid var(--line);
+    transition: background .15s, color .15s;
+  }
+  .nav-strip a:last-child { border-right: none; }
+  .nav-strip a:hover { background: var(--lime); color: var(--lime-ink); }
+  .nav-strip a em {
+    display: block; font-style: normal; font-family: var(--num);
+    font-size: 12px; font-weight: 700; color: var(--mute); margin-bottom: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .nav-strip a:hover em { color: var(--lime-ink); }
+
+  .pad { padding: 22px 20px 8px; }
+
+  /* ── blocks ── */
+  .block {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    margin-bottom: 14px;
+  }
+  .block-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(90deg, var(--lime) 0 4px, transparent 4px);
+  }
+  .block-num {
+    font-family: var(--num);
+    font-size: 22px; font-weight: 700; line-height: 1; color: var(--ink);
+    min-width: 36px; font-variant-numeric: tabular-nums;
+  }
+  .block-title { font-size: 16px; font-weight: 900; letter-spacing: -.02em; }
+  .block-sub { margin-left: auto; font-size: 11px; color: var(--mute); font-weight: 500; }
+  .block-body { padding: 16px; }
+
+  /* ── account meters ── */
+  .merge {
+    display: grid; grid-template-columns: 1.2fr 1.2fr 1fr; gap: 12px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 640px) {
+    .merge { grid-template-columns: 1fr; }
+  }
+  .big-stat {
+    padding: 14px 14px 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .big-stat.hero-stat {
+    background: var(--slate);
+    color: #fff; border-color: var(--slate);
+  }
+  .big-stat .lbl {
+    font-size: 11px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--mute); margin-bottom: 6px;
+  }
+  .big-stat.hero-stat .lbl { color: rgba(255,255,255,.55); }
+  .big-stat .val {
+    font-family: var(--num); font-size: 28px; font-weight: 700;
+    letter-spacing: -.01em; font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+  .big-stat.hero-stat .val { font-size: 32px; color: #fff; }
+  .big-stat .hint { font-size: 11px; color: var(--mute); margin-top: 4px; }
+  .big-stat.hero-stat .hint { color: rgba(245,242,235,.5); }
+  .big-stat .val.neg { color: var(--green); }
+  .big-stat .val.pos { color: var(--rust); }
+  .big-stat .val.hot { color: var(--rust); }
+  .big-stat.hero-stat .val.neg { color: #6bcf8e; }
+  .big-stat.hero-stat .val.pos { color: #ff8a7a; }
+  .big-stat.hero-stat .val.hot { color: #ff8a7a; }
+
+  .meter {
+    position: relative;
+    margin-top: 10px; height: 6px;
+    background: rgba(255,255,255,.15);
+  }
+  .big-stat:not(.hero-stat) .meter { background: #efeae2; }
+  .meter > span {
+    display: block; height: 100%;
+    background: #c8c2b6;
+    transform-origin: left center;
+    animation: fillX .85s cubic-bezier(.2,.8,.2,1) both;
+  }
+  /* 仅合并总仓位：≤90% 正常；>90% 风险（纯色，无渐变） */
+  .meter.hot > span { background: var(--rust); }
+  .big-stat.hero-stat .meter > span { background: rgba(245,242,235,.55); }
+  .big-stat.hero-stat .meter.hot > span { background: #ff8a7a; }
+  /* 90% 阈值刻度（仅竖线，不标文字） */
+  .meter-mark {
+    position: absolute;
+    left: 90%;
+    top: -3px;
+    width: 1.5px;
+    height: 12px;
+    margin-left: -0.75px;
+    background: #fff;
+    opacity: .85;
+    pointer-events: none;
+    box-shadow: 0 0 0 1px rgba(42,51,64,.25);
+  }
+
+  .accounts {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  @media (max-width: 640px) {
+    .accounts { grid-template-columns: 1fr; }
+  }
+  .acct {
+    border: 1px solid var(--line); background: #fff;
+    padding: 11px 12px 10px;
+  }
+  .acct-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 10px; margin-bottom: 8px;
+    padding-bottom: 7px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .acct-name {
+    font-size: 13px; font-weight: 800; color: var(--ink);
+  }
+  .acct-pos {
+    font-size: 12px; font-weight: 600; color: var(--mute);
+  }
+  .acct-pos em {
+    font-style: normal;
+    font-family: var(--num); font-weight: 700;
+    color: var(--ink); font-variant-numeric: tabular-nums;
+    margin-left: 4px;
+  }
+  .acct-grid {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 7px 12px;
+  }
+  .acct-grid .lbl {
+    font-size: 10px; color: var(--mute); font-weight: 600; margin-bottom: 1px;
+  }
+  .acct-grid .val {
+    font-family: var(--num); font-size: 15px; font-weight: 700;
+    font-variant-numeric: tabular-nums; letter-spacing: -.01em;
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+  .acct-grid .val.neg { color: var(--green); }
+  .acct-grid .val.pos { color: var(--rust); }
+
+
+
+
+
+
+  /* ── 次日预案（模块1 / 模块2 共用） ── */
+  .fb-plan {
+    background: var(--slate);
+    color: #f5f2eb;
+    padding: 16px 16px 14px;
+  }
+  .fb-plan + .fb-plan { margin-top: 12px; }
+  .fb-plan-k {
+    font-size: 10px; font-weight: 900; letter-spacing: .14em;
+    color: var(--lime); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .fb-plan-v {
+    font-size: 16px; font-weight: 800; color: #fff; line-height: 1.5;
+    letter-spacing: -.01em;
+  }
+  .fb-plan-v + .fb-plan-v { margin-top: 10px; }
+  .fb-plan-v .sub {
+    display: block; margin-top: 8px;
+    font-size: 13px; font-weight: 500; color: rgba(245,242,235,.7);
+  }
+  /* 模块1：同级提示，字重更轻 */
+  .fb-plan.quiet .fb-plan-v {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(245,242,235,.88);
+    letter-spacing: 0;
+  }
+  .fb-plan.quiet .fb-plan-v + .fb-plan-v { margin-top: 8px; }
+  .fb-plans { margin-top: 12px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* ── 开仓反馈 ── */
+  .fb {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fb-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 640px) {
+    .fb-row { grid-template-columns: 1fr; }
+  }
+  .fb-stat {
+    padding: 14px 14px 12px;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .fb-stat .lbl {
+    font-size: 11px; font-weight: 700; letter-spacing: .06em;
+    color: var(--mute); margin-bottom: 6px;
+  }
+  .fb-stat .val-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .fb-stat .val {
+    font-family: var(--num); font-size: 28px; font-weight: 700;
+    letter-spacing: -.01em; font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: subpixel-antialiased; line-height: 1.1;
+  }
+  .fb-stat .val.neg { color: var(--green); }
+  .fb-stat .val.pos { color: var(--rust); }
+  .fb-stat .meta {
+    font-family: var(--num); font-size: 12px; font-weight: 600;
+    color: var(--mute); font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .fb-bar {
+    position: relative;
+    margin-top: 10px; height: 6px; background: #efeae2;
+  }
+  /* 默认绿 = 胜率 <40%；.pos 红 = 胜率 ≥40% */
+  .fb-bar > span {
+    display: block; height: 100%;
+    background: var(--green);
+    transform-origin: left center;
+    animation: fillX .85s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .fb-bar.pos > span { background: var(--rust); }
+  /* 40% 阈值刻度（仅竖线） */
+  .fb-mark {
+    position: absolute;
+    left: 40%;
+    top: -3px;
+    width: 1.5px;
+    height: 12px;
+    margin-left: -0.75px;
+    background: var(--ink);
+    opacity: .35;
+    pointer-events: none;
+  }
+  .fb-chips {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .fb-chip {
+    font-size: 11px; font-weight: 700; padding: 3px 8px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink);
+  }
+  .fb-chip.lose {
+    border-color: rgba(31,122,76,.35); color: var(--green); background: var(--green-bg);
+  }
+  .fb-chip.win {
+    border-color: rgba(226,61,40,.35); color: var(--rust); background: var(--rust-bg);
+  }
+
+  /* ── macro risk (legacy unused) ── */
+  .macro {
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .macro-head {
+    background: var(--slate);
+    color: #f5f2eb;
+    padding: 14px 16px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px;
+  }
+  .macro-head .mh-k {
+    font-size: 10px; font-weight: 900; letter-spacing: .14em;
+    color: var(--lime); text-transform: uppercase;
+  }
+  .macro-head .mh-v {
+    font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -.02em;
+  }
+  .macro-head .mh-s {
+    width: 100%;
+    font-size: 12px; color: rgba(245,242,235,.62); font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .macro-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 640px) {
+    .macro-metrics { grid-template-columns: 1fr; }
+  }
+  .mm {
+    padding: 14px 14px 12px;
+    border-right: 1px solid var(--line);
+    min-height: 108px;
+  }
+  .mm:last-child { border-right: none; }
+  @media (max-width: 640px) {
+    .mm {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      min-height: 0;
+    }
+    .mm:last-child { border-bottom: none; }
+  }
+  .mm-k {
+    font-size: 11px; font-weight: 800; color: var(--mute);
+    letter-spacing: .06em; margin-bottom: 8px;
+  }
+  .mm-v {
+    font-family: var(--font);
+    font-size: 22px; font-weight: 900;
+    letter-spacing: -.02em; line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    min-height: 1.3em;
+  }
+  .mm-v.num { font-family: var(--num); font-weight: 700; font-size: 26px; }
+  .mm.risk .mm-v { color: var(--rust); }
+  .mm.ok .mm-v { color: var(--green); }
+  .mm-h {
+    margin-top: 8px;
+    font-size: 12px; color: var(--soft); line-height: 1.4;
+  }
+
+  .macro-detail {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 640px) {
+    .macro-detail { grid-template-columns: 1fr; }
+  }
+  .md {
+    padding: 12px 14px;
+    border-right: 1px solid var(--line);
+  }
+  .md:last-child { border-right: none; }
+  @media (max-width: 640px) {
+    .md { border-right: none; border-bottom: 1px solid var(--line); }
+    .md:last-child { border-bottom: none; }
+  }
+  .md-k {
+    font-size: 11px; font-weight: 800; color: var(--mute);
+    letter-spacing: .06em; margin-bottom: 8px;
+  }
+  .md-s {
+    font-size: 12px; color: var(--soft); line-height: 1.5;
+  }
+  .mrow-chips {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .mchip {
+    font-size: 11px; font-weight: 700; padding: 4px 8px;
+    border: 1px solid var(--line); background: #f7f4ef; color: var(--ink);
+  }
+  .mchip.lose { border-color: rgba(31,122,76,.35); color: var(--green); background: var(--green-bg); }
+  .mchip.win { border-color: rgba(226,61,40,.35); color: var(--rust); background: var(--rust-bg); }
+  .mrow-meter {
+    margin-top: 10px; height: 8px; background: #efeae2; overflow: hidden;
+  }
+  .mrow-meter > span {
+    display: block; height: 100%;
+    background: var(--rust);
+    transform-origin: left center;
+    animation: fillX .85s cubic-bezier(.2,.8,.2,1) both;
+  }
+
+
+
+  .broker {
+    font-size: 12px; font-weight: 800; color: var(--slate);
+    letter-spacing: .1em; margin: 18px 0 8px;
+    padding-left: 2px;
+  }
+  .broker:first-of-type { margin-top: 4px; }
+
+  .hold {
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--slate);
+    background: #fff;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 0 rgba(20,20,20,.04), 0 8px 24px rgba(20,20,20,.04);
+    overflow: hidden;
+  }
+  .hold-top {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px;
+    padding: 12px 14px 10px;
+    background: linear-gradient(180deg, #f3f0ea 0%, #fffcf7 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .hold-name { font-size: 18px; font-weight: 900; letter-spacing: -.02em; }
+  .hold-code {
+    font-family: var(--num); font-size: 14px; color: var(--soft); font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .hold-px {
+    margin-left: auto;
+    font-family: var(--num); font-size: 14px; font-weight: 700;
+    color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .hold-px .neg { color: var(--green); font-weight: 700; }
+  .hold-px .pos { color: var(--rust); font-weight: 700; }
+
+  .chk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 12px 14px;
+  }
+  @media (max-width: 560px) {
+    .chk-grid { grid-template-columns: 1fr; }
+  }
+  .chk {
+    border: 1px solid var(--line);
+    background: #faf8f4;
+    padding: 10px 11px;
+  }
+  .chk.hit {
+    background: #fff8f7;
+    border-color: rgba(226,61,40,.4);
+  }
+  .chk-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 8px; margin-bottom: 4px;
+  }
+  .chk-q {
+    font-size: 13px; font-weight: 800; color: var(--ink); line-height: 1.35;
+  }
+  .chk.hit .chk-q { color: var(--rust); }
+  .chk-st {
+    flex-shrink: 0;
+    font-size: 11px; font-weight: 900; padding: 2px 7px;
+    border: 1px solid var(--line); background: #fff; color: var(--mute);
+  }
+  .chk.hit .chk-st {
+    background: var(--rust); color: #fff; border-color: var(--rust);
+  }
+  .chk.pass .chk-st {
+    background: var(--green-bg); color: var(--green);
+    border-color: rgba(31,122,76,.3);
+  }
+  .chk-d {
+    font-size: 12px; color: var(--soft); line-height: 1.45;
+  }
+
+
+  .hold-sum {
+    margin: 4px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sum-card {
+    border: 1px solid var(--line);
+    background: #faf8f4;
+    padding: 12px;
+  }
+  .sum-k {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+  .sum-lines {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sum-lines li {
+    display: grid;
+    grid-template-columns: 1.4em 1fr;
+    gap: 4px 6px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .sum-lines.solo li {
+    grid-template-columns: 1fr;
+  }
+  .sum-lines .n {
+    font-family: var(--num);
+    font-weight: 700;
+    color: var(--mute);
+    font-variant-numeric: tabular-nums;
+  }
+  .sum-card.sum-act {
+    background: #f3f0ea;
+    border-color: var(--line);
+  }
+  .sum-card.sum-act .sum-k {
+    margin-bottom: 8px;
+  }
+  .sum-card.sum-act .sum-line {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+
+  .foot {
+    text-align: center; font-size: 11px; color: var(--mute);
+    padding: 8px 16px 0;
+  }
+
+  .nav-short { display: none; }
+
+  /* ── 手机适配 ── */
+  @media (max-width: 640px) {
+    :root {
+      --font: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", system-ui, sans-serif;
+      --num: "IBM Plex Sans", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+    }
+
+    body {
+      font-size: 15px;
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+    }
+
+    html {
+      scroll-padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    }
+
+    .shell {
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .mast {
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 18px 18px;
+    }
+    .mast::after {
+      width: 96px; height: 96px; right: -30px; bottom: -40px;
+      opacity: .75;
+    }
+    .back-list {
+      margin-bottom: 12px;
+      min-height: 40px;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    .mast-kicker {
+      font-size: 10px;
+      letter-spacing: .18em;
+      margin-bottom: 8px;
+    }
+    .mast h1 {
+      font-size: 24px;
+      line-height: 1.25;
+      letter-spacing: -.01em;
+    }
+    .mast h1 span {
+      font-size: 13px;
+      margin-top: 8px;
+      line-height: 1.45;
+      color: rgba(245,242,235,.72);
+    }
+
+    /* 手机不显示分区 tab */
+    .nav-strip { display: none; }
+
+    .pad {
+      padding: 14px 14px 12px;
+    }
+    .block {
+      margin-bottom: 14px;
+      border-radius: 0;
+    }
+    .block-head {
+      align-items: baseline;
+      gap: 8px 10px;
+      padding: 13px 14px;
+    }
+    .block-num { font-size: 20px; min-width: 30px; }
+    .block-title { font-size: 16px; line-height: 1.3; }
+    .block-sub { display: none; }
+    .block-body { padding: 14px; }
+
+    .merge { gap: 10px; margin-bottom: 14px; }
+    .big-stat { padding: 14px; }
+    .big-stat .lbl {
+      font-size: 12px;
+      margin-bottom: 8px;
+      letter-spacing: .04em;
+    }
+    .big-stat .val {
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .big-stat.hero-stat .val { font-size: 34px; }
+    .big-stat .hint {
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+    .meter { margin-top: 12px; height: 7px; }
+
+    .accounts { gap: 10px; }
+    .acct { padding: 12px 13px; }
+    .acct-name { font-size: 14px; }
+    .acct-pos { font-size: 13px; }
+    .acct-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 12px;
+    }
+    .acct-grid .lbl { font-size: 12px; margin-bottom: 3px; }
+    .acct-grid .val { font-size: 16px; line-height: 1.2; }
+
+    .fb { gap: 10px; }
+    .fb-row { gap: 10px; }
+    .fb-stat { padding: 14px; }
+    .fb-stat .lbl { font-size: 12px; margin-bottom: 8px; }
+    .fb-stat .val { font-size: 30px; }
+    .fb-stat .meta { font-size: 13px; }
+    .fb-chips { gap: 8px; }
+    .fb-chip {
+      font-size: 12px;
+      padding: 5px 10px;
+      line-height: 1.35;
+    }
+    .fb-plans { margin-top: 14px; gap: 10px; }
+    .fb-plan { padding: 14px 14px 13px; }
+    .fb-plan-k {
+      font-size: 10px;
+      margin-bottom: 10px;
+    }
+    .fb-plan-v {
+      font-size: 16px;
+      line-height: 1.6;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+    .fb-plan-v .sub {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+    .fb-plan.quiet .fb-plan-v {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .broker {
+      font-size: 12px;
+      margin: 16px 0 10px;
+      letter-spacing: .08em;
+    }
+    .hold {
+      margin-bottom: 14px;
+      /* 手机去掉左侧粗黑条，改顶栏细线，不占横向宽度 */
+      border-left: 1px solid var(--line);
+      box-shadow: 0 1px 0 rgba(20,20,20,.03), 0 4px 14px rgba(20,20,20,.04);
+    }
+    .hold-top {
+      padding: 12px 14px 11px;
+      gap: 4px 10px;
+      align-items: center;
+      border-top: 3px solid var(--slate);
+    }
+    .hold-name { font-size: 17px; line-height: 1.25; }
+    .hold-code { font-size: 13px; }
+    .hold-px {
+      margin-left: auto;
+      width: auto;
+      max-width: 100%;
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+    .chk-grid { margin: 12px 12px 10px; gap: 8px; }
+    .chk { padding: 11px 12px; }
+    .chk-q {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .chk-st {
+      font-size: 12px;
+      padding: 3px 8px;
+    }
+    .chk-d {
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 2px;
+    }
+
+    .hold-sum { margin: 0 12px 12px; gap: 8px; }
+    .sum-card { padding: 12px 13px; }
+    .sum-k { font-size: 14px; margin-bottom: 8px; }
+    .sum-lines { gap: 10px; }
+    .sum-lines li,
+    .sum-card.sum-act .sum-line {
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .foot {
+      padding: 12px 8px 4px;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim, .d1, .d2, .d3, .meter > span, .fb-bar > span { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="mast anim">
+    <a class="back-list" href="https://mcxdcyy.github.io/holding-review/">← 日期列表</a>
+    <div class="mast-kicker">Daily Position Review</div>
+    <h1>
+      持仓复盘-07-22
+      <span>东财 + 国金（同花顺） · 2026</span>
+    </h1>
+  </header>
+
+  <nav class="nav-strip anim d1">
+    <a href="#sec-account"><em>01</em><span class="nav-full">账户概览</span><span class="nav-short">账户</span></a>
+    <a href="#sec-winrate"><em>02</em><span class="nav-full">开仓反馈</span><span class="nav-short">开仓</span></a>
+    <a href="#sec-stocks"><em>03</em><span class="nav-full">个人情绪 &amp; 持仓复盘</span><span class="nav-short">持仓</span></a>
+  </nav>
+
+  <div class="pad">
+
+    <section class="block anim d1" id="sec-account">
+      <div class="block-head">
+        <div class="block-num">01</div>
+        <div class="block-title">账户概览</div>
+        <div class="block-sub">仓位 · 总资产 · 盈亏 · 次日预案</div>
+      </div>
+      <div class="block-body">
+        <div class="merge">
+          <div class="big-stat hero-stat">
+            <div class="lbl">总仓位占比</div>
+            <div class="val hot">100%</div>
+            <div class="meter hot"><span style="width:100%"></span><i class="meter-mark" aria-hidden="true"></i></div>
+          </div>
+          <div class="big-stat">
+            <div class="lbl">合并总资产</div>
+            <div class="val">997,825</div>
+            <div class="hint">东财 + 国金</div>
+          </div>
+          <div class="big-stat">
+            <div class="lbl">当日盈亏</div>
+            <div class="val neg">-2.7%</div>
+            <div class="hint">合并约 -2.8w</div>
+          </div>
+        </div>
+
+        <div class="accounts">
+          <div class="acct">
+            <div class="acct-head">
+              <span class="acct-name">东财</span>
+              <span class="acct-pos">仓位<em>100%</em></span>
+            </div>
+            <div class="acct-grid">
+              <div>
+                <div class="lbl">总资产</div>
+                <div class="val">607,034</div>
+              </div>
+              <div>
+                <div class="lbl">当日盈亏</div>
+                <div class="val neg">-2.2%</div>
+              </div>
+              <div>
+                <div class="lbl">持仓</div>
+                <div class="val">607,024</div>
+              </div>
+              <div>
+                <div class="lbl">可用</div>
+                <div class="val">10</div>
+              </div>
+            </div>
+          </div>
+          <div class="acct">
+            <div class="acct-head">
+              <span class="acct-name">国金</span>
+              <span class="acct-pos">仓位<em>100%</em></span>
+            </div>
+            <div class="acct-grid">
+              <div>
+                <div class="lbl">总资产</div>
+                <div class="val">390,791</div>
+              </div>
+              <div>
+                <div class="lbl">当日盈亏</div>
+                <div class="val neg">-3.5%</div>
+              </div>
+              <div>
+                <div class="lbl">持仓</div>
+                <div class="val">389,550</div>
+              </div>
+              <div>
+                <div class="lbl">可用</div>
+                <div class="val">1,241</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fb-plans">
+          <div class="fb-plan quiet">
+            <div class="fb-plan-k">次日预案</div>
+            <div class="fb-plan-v">无新仓位可用。——持仓个股：开盘需减仓。</div>
+            <div class="fb-plan-v">若次日无开仓方向，持仓需开盘减仓。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="block anim d2" id="sec-winrate">
+      <div class="block-head">
+        <div class="block-num">02</div>
+        <div class="block-title">开仓反馈</div>
+        <div class="block-sub">胜率 · 均值 · 次日预案</div>
+      </div>
+      <div class="block-body">
+        <div class="fb">
+          <div class="fb-row">
+            <div class="fb-stat">
+              <div class="lbl">5日开仓胜率</div>
+              <div class="val-row">
+                <div class="val neg">0%</div>
+                <div class="meta">0 / 2</div>
+              </div>
+              <div class="fb-bar"><span style="width:0%"></span><i class="fb-mark" aria-hidden="true"></i></div>
+            </div>
+            <div class="fb-stat">
+              <div class="lbl">2日开仓胜率</div>
+              <div class="val-row">
+                <div class="val neg">0%</div>
+                <div class="meta">0 / 2</div>
+              </div>
+              <div class="fb-bar"><span style="width:0%"></span><i class="fb-mark" aria-hidden="true"></i></div>
+            </div>
+          </div>
+
+          <div class="fb-chips">
+            <span class="fb-chip lose">星环科技 · 负</span>
+            <span class="fb-chip lose">易点天下 · 负</span>
+          </div>
+
+          <div class="fb-row">
+            <div class="fb-stat">
+              <div class="lbl">5日盈亏均值（日内）</div>
+              <div class="val-row">
+                <div class="val pos">+1.1%</div>
+                <div class="meta">35 笔</div>
+              </div>
+            </div>
+            <div class="fb-stat">
+              <div class="lbl">2日盈亏均值（日内）</div>
+              <div class="val-row">
+                <div class="val pos">+2.9%</div>
+                <div class="meta">23 笔</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fb-plan">
+            <div class="fb-plan-k">次日预案</div>
+            <div class="fb-plan-v">模式内 - 可以试单。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="block anim d3" id="sec-stocks">
+      <div class="block-head">
+        <div class="block-num">03</div>
+        <div class="block-title">个人情绪 &amp; 持仓复盘</div>
+        <div class="block-sub">持仓情绪与处理</div>
+      </div>
+      <div class="block-body">
+        <div class="broker">东财</div>
+        <article class="hold">
+          <div class="hold-top">
+            <span class="hold-name">星环科技</span>
+            <span class="hold-code">688031</span>
+            <span class="hold-px"><span class="num">88.00</span>（<span class="neg">-26.6%</span>）</span>
+          </div>
+          <div class="chk-grid">
+            <div class="chk hit">
+              <div class="chk-head">
+                <div class="chk-q">仓位超限</div>
+                <div class="chk-st">触发</div>
+              </div>
+              <div class="chk-d">总仓61%，超过50%限制。仓位 = 风险。主观不看好，只做风险验证。</div>
+            </div>
+            <div class="chk hit">
+              <div class="chk-head">
+                <div class="chk-q">模式外锁仓（想赚钱）</div>
+                <div class="chk-st">触发</div>
+              </div>
+              <div class="chk-d">主观不看好，只做风险验证。——卖飞1w次，你还活着。</div>
+            </div>
+            <div class="chk pass">
+              <div class="chk-head">
+                <div class="chk-q">日内大幅冲高回落</div>
+                <div class="chk-st">未触发</div>
+              </div>
+              <div class="chk-d">相对昨收/开盘冲高未超 3%，收盘回撤约 3.2%，未达双条件</div>
+            </div>
+            <div class="chk pass">
+              <div class="chk-head">
+                <div class="chk-q">单日新仓爆亏</div>
+                <div class="chk-st">未触发</div>
+              </div>
+              <div class="chk-d">09:30 / 11:01 / 13:24 / 14:09 买入价贴近收盘 88.00，无单笔买入后亏超 5%</div>
+            </div>
+            <div class="chk pass">
+              <div class="chk-head">
+                <div class="chk-q">锁仓爆亏</div>
+                <div class="chk-st">未触发</div>
+              </div>
+              <div class="chk-d">持仓日内约 -2.4%，未亏超 5%</div>
+            </div>
+            <div class="chk hit">
+              <div class="chk-head">
+                <div class="chk-q">连续多笔亏损加仓</div>
+                <div class="chk-st">触发</div>
+              </div>
+              <div class="chk-d">09:30 / 11:01 / 11:02 / 13:24 / 14:09 连续买入。——亏损加仓，加重个股抛压。</div>
+            </div>
+          </div>
+          <div class="hold-sum">
+            <div class="sum-card">
+              <div class="sum-k">持仓情绪</div>
+              <ul class="sum-lines">
+                <li><span class="n">1.</span><span>着急想赚钱，想把失去的钱拿回来。——很容易再次加仓、锁仓。</span></li>
+                <li><span class="n">2.</span><span>持仓外，没有其它想拿的票。——整个市场不好，持仓票 - 锁仓很危险。</span></li>
+              </ul>
+            </div>
+            <div class="sum-card sum-act">
+              <div class="sum-k">处理</div>
+              <div class="sum-line">开盘先减仓，禁止加仓，卖出清仓。</div>
+            </div>
+          </div>
+        </article>
+
+        <div class="broker">国金</div>
+        <article class="hold">
+          <div class="hold-top">
+            <span class="hold-name">易点天下</span>
+            <span class="hold-code">301171</span>
+            <span class="hold-px"><span class="num">26.50</span>（<span class="neg">-10.6%</span>）</span>
+          </div>
+          <div class="chk-grid">
+            <div class="chk hit">
+              <div class="chk-head">
+                <div class="chk-q">仓位超限</div>
+                <div class="chk-st">触发</div>
+              </div>
+              <div class="chk-d">账户100%，超过80%限制。仓位 = 风险。主观不看好，只做风险验证。</div>
+            </div>
+            <div class="chk hit">
+              <div class="chk-head">
+                <div class="chk-q">模式外锁仓（想赚钱）</div>
+                <div class="chk-st">触发</div>
+              </div>
+              <div class="chk-d">主观不看好，只做风险验证。——卖飞1w次，你还活着。</div>
+            </div>
+            <div class="chk pass">
+              <div class="chk-head">
+                <div class="chk-q">日内大幅冲高回落</div>
+                <div class="chk-st">未触发</div>
+              </div>
+              <div class="chk-d">相对昨收/开盘冲高未超 3%，回撤约 3.8%，未达双条件</div>
+            </div>
+            <div class="chk pass">
+              <div class="chk-head">
+                <div class="chk-q">单日新仓爆亏</div>
+                <div class="chk-st">未触发</div>
+              </div>
+              <div class="chk-d">11:09 买入 26.50，收盘 26.50，未亏超 5%</div>
+            </div>
+            <div class="chk pass">
+              <div class="chk-head">
+                <div class="chk-q">锁仓爆亏</div>
+                <div class="chk-st">未触发</div>
+              </div>
+              <div class="chk-d">持仓日内约 -3.5%，未亏超 5%</div>
+            </div>
+            <div class="chk pass">
+              <div class="chk-head">
+                <div class="chk-q">连续多笔亏损加仓</div>
+                <div class="chk-st">未触发</div>
+              </div>
+              <div class="chk-d">今日先卖后买做 T，11:09 同一价位补回，不构成连续亏损加仓</div>
+            </div>
+          </div>
+          <div class="hold-sum">
+            <div class="sum-card">
+              <div class="sum-k">持仓情绪</div>
+              <ul class="sum-lines">
+                <li><span class="n">1.</span><span>着急想赚钱，想把失去的钱拿回来。——很容易再次加仓、锁仓。</span></li>
+                <li><span class="n">2.</span><span>持仓外，没有其它想拿的票。——整个市场不好，持仓票 - 锁仓很危险。</span></li>
+              </ul>
+            </div>
+            <div class="sum-card sum-act">
+              <div class="sum-k">处理</div>
+              <div class="sum-line">开盘先减仓，禁止加仓，卖出清仓。</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p class="foot">手机浏览器打开即可查看 · 桌面「持仓复盘」· 说「复盘」生成当日页</p>
+  </div>
+</div>
+</body>
+</html>
