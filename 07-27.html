@@ -576,20 +576,20 @@
   }
 
 
-  /* 结论区：与上方检查项白卡刻意区分（左边线 + 标签字，不是同款 chk 卡） */
+  /* 结论区：与检查项区分——无色块底、不用红；靠顶部分隔 + 标签字 + 细左边线 */
   .hold-sum {
     margin: 2px 14px 14px;
-    padding-top: 12px;
-    border-top: 1px dashed rgba(0,0,0,.12);
+    padding-top: 14px;
+    border-top: 1px solid rgba(0,0,0,.1);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 14px;
   }
   .sum-card {
     border: none;
-    border-left: 3px solid #3a3a3a;
-    background: #efece6;
-    padding: 11px 14px 12px;
+    border-left: 2px solid rgba(0,0,0,.22);
+    background: transparent;
+    padding: 0 0 0 12px;
   }
   .sum-k {
     font-size: 11px;
@@ -597,7 +597,7 @@
     letter-spacing: .14em;
     color: var(--mute);
     line-height: 1.35;
-    margin-bottom: 7px;
+    margin-bottom: 6px;
   }
   .sum-lines {
     list-style: none;
@@ -626,12 +626,12 @@
     font-variant-numeric: tabular-nums;
   }
   .sum-card.sum-act {
-    background: #e7e2d8;
-    border-left-color: var(--rust);
+    background: transparent;
+    border-left-color: rgba(0,0,0,.45);
   }
   .sum-card.sum-act .sum-k {
-    color: var(--rust);
-    margin-bottom: 7px;
+    color: var(--mute);
+    margin-bottom: 6px;
   }
   .sum-card.sum-act .sum-line {
     font-size: 13px;
@@ -639,6 +639,7 @@
     color: var(--ink);
     line-height: 1.65;
   }
+
 
   .foot {
     text-align: center; font-size: 11px; color: var(--mute);
@@ -828,14 +829,14 @@
 
     .hold-sum {
       margin: 0 12px 12px;
-      padding-top: 12px;
-      gap: 8px;
+      padding-top: 14px;
+      gap: 14px;
     }
-    .sum-card { padding: 12px 13px 12px 14px; }
+    .sum-card { padding: 0 0 0 12px; }
     .sum-k {
       font-size: 12px;
       letter-spacing: .12em;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .sum-lines { gap: 10px; }
     .sum-lines li,
