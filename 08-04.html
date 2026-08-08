@@ -576,15 +576,16 @@
   }
 
 
-  /* 结论区：两块同系边框卡（持仓情绪 / 处理）；标题深灰；行距对齐 chk */
+  /* 结论区：两块同系边框卡（持仓情绪 / 处理）；与上方检查项用分隔线隔开 */
   .hold-sum {
     margin: 4px 14px 14px;
-    padding: 0;
+    padding: 12px 0 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
     background: transparent;
     border: none;
+    border-top: 1px solid var(--line);
   }
   .sum-card {
     border: 1px solid var(--line);
@@ -820,7 +821,7 @@
 
     .hold-sum {
       margin: 0 12px 12px;
-      padding: 0;
+      padding: 12px 0 0;
       gap: 8px;
     }
     .sum-card { padding: 11px 12px; }
