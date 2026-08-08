@@ -576,15 +576,15 @@
   }
 
 
-  /* 结论区：单层安静底 + 标签，无左边线、无叠卡、不用红 */
+  /* 结论区：与检查项同系边框/底色，无左边线、不叠卡；标签略弱作区分 */
   .hold-sum {
     margin: 4px 14px 14px;
-    padding: 14px 14px 12px;
+    padding: 10px 11px 11px;
     display: flex;
     flex-direction: column;
     gap: 0;
-    background: #f3f1ec;
-    border: none;
+    background: #faf8f4;
+    border: 1px solid var(--line);
   }
   .sum-card {
     border: none;
@@ -592,15 +592,11 @@
     padding: 0;
   }
   .sum-k {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .12em;
-    color: var(--mute);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--ink);
     line-height: 1.35;
-    margin-bottom: 8px;
-    padding: 3px 8px;
-    background: rgba(0,0,0,.06);
+    margin-bottom: 4px;
   }
   .sum-lines {
     list-style: none;
@@ -614,10 +610,10 @@
     display: grid;
     grid-template-columns: 1.4em 1fr;
     gap: 4px 6px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 400;
-    color: var(--ink);
-    line-height: 1.65;
+    color: var(--soft);
+    line-height: 1.45;
   }
   .sum-lines.solo li {
     grid-template-columns: 1fr;
@@ -629,20 +625,20 @@
     font-variant-numeric: tabular-nums;
   }
   .sum-card.sum-act {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid rgba(0,0,0,.08);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
     background: transparent;
   }
   .sum-card.sum-act .sum-k {
-    color: var(--mute);
-    margin-bottom: 8px;
+    color: var(--ink);
+    margin-bottom: 4px;
   }
   .sum-card.sum-act .sum-line {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 400;
-    color: var(--ink);
-    line-height: 1.65;
+    color: var(--soft);
+    line-height: 1.45;
   }
 
   .foot {
@@ -833,21 +829,19 @@
 
     .hold-sum {
       margin: 0 12px 12px;
-      padding: 14px 13px 12px;
+      padding: 11px 12px;
       gap: 0;
     }
     .sum-card { padding: 0; }
     .sum-k {
-      font-size: 12px;
-      letter-spacing: .1em;
-      margin-bottom: 8px;
-      padding: 4px 9px;
+      font-size: 14px;
+      margin-bottom: 4px;
     }
     .sum-lines { gap: 10px; }
     .sum-lines li,
     .sum-card.sum-act .sum-line {
-      font-size: 14px;
-      line-height: 1.7;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .foot {
