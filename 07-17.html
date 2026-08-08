@@ -553,28 +553,29 @@
   }
 
 
-  /* 结论区：与检查项区分——无色块底、不用红；靠顶部分隔 + 标签字 + 细左边线 */
+  /* 结论区：托盘叠白卡（层次感）；单色中性托盘，不用红、不加杂色底 */
   .hold-sum {
-    margin: 2px 14px 14px;
-    padding-top: 14px;
-    border-top: 1px solid rgba(0,0,0,.1);
+    margin: 4px 14px 14px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 8px;
+    background: #e9e7e1;
+    border: 1px solid rgba(0,0,0,.06);
   }
   .sum-card {
-    border: none;
-    border-left: 2px solid rgba(0,0,0,.22);
-    background: transparent;
-    padding: 0 0 0 12px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: #fff;
+    padding: 12px 14px;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04);
   }
   .sum-k {
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: .14em;
+    letter-spacing: .12em;
     color: var(--mute);
     line-height: 1.35;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .sum-lines {
     list-style: none;
@@ -603,12 +604,13 @@
     font-variant-numeric: tabular-nums;
   }
   .sum-card.sum-act {
-    background: transparent;
-    border-left-color: rgba(0,0,0,.45);
+    background: #fff;
+    border-color: rgba(0,0,0,.12);
+    border-left: 3px solid #2c2c2c;
   }
   .sum-card.sum-act .sum-k {
     color: var(--mute);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .sum-card.sum-act .sum-line {
     font-size: 13px;
