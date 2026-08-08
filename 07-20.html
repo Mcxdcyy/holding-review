@@ -553,25 +553,25 @@
   }
 
 
-  /* 结论区：与检查项同系边框/底色，无左边线、不叠卡；标签略弱作区分 */
+  /* 结论区：两块同系边框卡（持仓情绪 / 处理）；标题深灰；行距对齐 chk */
   .hold-sum {
     margin: 4px 14px 14px;
-    padding: 10px 11px 11px;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0;
-    background: #faf8f4;
-    border: 1px solid var(--line);
+    gap: 8px;
+    background: transparent;
+    border: none;
   }
   .sum-card {
-    border: none;
-    background: transparent;
-    padding: 0;
+    border: 1px solid var(--line);
+    background: #faf8f4;
+    padding: 10px 11px;
   }
   .sum-k {
     font-size: 13px;
     font-weight: 800;
-    color: var(--ink);
+    color: var(--soft);
     line-height: 1.35;
     margin-bottom: 4px;
   }
@@ -581,7 +581,7 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
   }
   .sum-lines li {
     display: grid;
@@ -600,16 +600,6 @@
     font-weight: 700;
     color: var(--mute);
     font-variant-numeric: tabular-nums;
-  }
-  .sum-card.sum-act {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid var(--line);
-    background: transparent;
-  }
-  .sum-card.sum-act .sum-k {
-    color: var(--ink);
-    margin-bottom: 4px;
   }
   .sum-card.sum-act .sum-line {
     font-size: 12px;
